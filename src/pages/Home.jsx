@@ -179,7 +179,7 @@ export default function Home() {
           г.Алматы, Кунаева 19 в «FF»
         </p>
         <p className="text-lg md:text-xl">
-          • +7 700 123 4567
+          • +7 707 778 7009
         </p>
       </div>
 
