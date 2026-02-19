@@ -216,7 +216,7 @@ export default function Home() {
         {products
           .filter((p) => p.category === activeCategory)
           .map((product) => (
-            <div key={product.id} className="w-45 p-4 bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+            <div key={product.id} className="w-45 p-4 bg-[#E0B4B4] rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
             <img 
               src={product.img} 
               alt={product.name} 
