@@ -176,7 +176,10 @@ export default function Home() {
         </h1>
 
         <p className="text-lg md:text-xl">
-          г. Алматы • +7 700 123 4567
+          г.Алматы, Кунаева 19 в «FF»
+        </p>
+        <p className="text-lg md:text-xl">
+          • +7 700 123 4567
         </p>
       </div>
 
