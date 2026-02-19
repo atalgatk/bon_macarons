@@ -18,7 +18,7 @@ export default function Product() {
       return;
     }
 
-    const phone = "7777777777"; // ← замените на ваш номер WhatsApp
+    const phone = "+77077787009"; 
     const message = encodeURIComponent(
       `Здравствуйте! Я хочу заказать:\n${product.name}\nЦена: ${product.price} ₸\nИмя: ${customerName}\nТелефон: ${customerPhone}`
     );
@@ -27,35 +27,47 @@ export default function Product() {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow">
-      <img src={product.img} alt={product.name} className="w-full rounded" />
-      <h2 className="text-2xl font-bold mt-4">{product.name}</h2>
-      <p className="mt-2 text-xl font-semibold">{product.price} ₸</p>
+    <div className="min-h-screen bg-gray-50 py-10">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+        
+        <img
+          src={product.img}
+          alt={product.name}
+          className="w-full h-[500px] object-contain bg-white"
+        />
 
-      <div className="mt-4">
-        <input
-          type="text"
-          placeholder="Ваше имя"
-          value={customerName}
-          onChange={(e) => setCustomerName(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-        />
-        <input
-          type="tel"
-          placeholder="Ваш телефон"
-          value={customerPhone}
-          onChange={(e) => setCustomerPhone(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-        />
+        <div className="p-8">
+          <h2 className="text-3xl font-bold">{product.name}</h2>
+          <p className="mt-2 text-2xl font-semibold">{product.price} ₸</p>
+
+          <div className="mt-6">
+            <input
+              type="text"
+              placeholder="Ваше имя"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              className="w-full p-3 border rounded mb-3"
+            />
+            <input
+              type="tel"
+              placeholder="Ваш телефон"
+              value={customerPhone}
+              onChange={(e) => setCustomerPhone(e.target.value)}
+              className="w-full p-3 border rounded mb-3"
+            />
+          </div>
+
+          <button
+            onClick={handleBuyWhatsApp}
+            className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-lg"
+          >
+            Заказать через WhatsApp
+          </button>
+        </div>
+
       </div>
-
-      <button
-        onClick={handleBuyWhatsApp}
-        className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded"
-      >
-        Заказать через WhatsApp
-      </button>
     </div>
   );
+
 }
 
