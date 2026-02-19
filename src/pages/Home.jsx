@@ -169,7 +169,10 @@ export default function Home() {
       <div className="relative z-10 text-white text-center px-6">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           Bon Macarons!
-          Выбор тех, кто знает толк в сладостях - от Алматы до Астаны🎀
+        </h1>
+
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+           Выбор тех, кто знает толк в сладостях - от Алматы до Астаны🎀
         </h1>
 
         <p className="text-lg md:text-xl">
