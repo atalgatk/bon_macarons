@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 
@@ -69,7 +70,25 @@ export default function Home() {
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
+  const [isCityModalOpen, setIsCityModalOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState(null);
+
+  useEffect(() => {
+  const savedCity = localStorage.getItem("city");
+
+  if (!savedCity && window.innerWidth < 768) {
+    setIsCityModalOpen(true);
+    } else if (savedCity) {
+      setSelectedCity(savedCity);
+    }
+  }, []);
+
+  const chooseCity = (city) => {
+    localStorage.setItem("city", city);
+    setSelectedCity(city);
+    setIsCityModalOpen(false);
+  };
+    
 
   const addToCart = (product) => {
     setCart((prev) => {
@@ -220,6 +239,40 @@ export default function Home() {
         </div>
       </div>
 
+    )}
+
+    {/* CITY MODAL */}
+    {isCityModalOpen && (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-6">
+        <div className="bg-white w-full max-w-md rounded-3xl p-8 relative shadow-2xl">
+
+          <button
+            onClick={() => setIsCityModalOpen(false)}
+            className="absolute top-4 right-4 text-2xl text-gray-400"
+          >
+            ✕
+          </button>
+
+          <h2 className="text-2xl font-semibold text-center mb-8">
+            Выберите город
+          </h2>
+
+          <div className="space-y-4">
+
+            {["Алматы", "Астана"].map((city) => (
+              <button
+                key={city}
+                onClick={() => chooseCity(city)}
+                className="w-full py-4 border rounded-2xl hover:bg-black hover:text-white transition"
+              >
+                {city}
+              </button>
+            ))}
+
+          </div>
+
+        </div>
+      </div>
     )}
 
       {/* CART SIDEBAR */}
