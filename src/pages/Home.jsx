@@ -1,23 +1,9 @@
+"use client";
 import { useState } from "react";
 
 
+
 export default function Home() {
-  const [cart, setCart] = useState([]);
-  const [customerName, setCustomerName] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [activeCategory, setActiveCategory] = useState("Макаронс"); // По умолчанию
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
-  {/* Приветствие */}
-  <div className="min-h-screen flex flex-col items-center justify-center bg-[#fff0f5] text-center">
-    <h1 className="text-5xl font-bold mb-4 animate-fadeInDown">
-      Bon Macarons!
-    </h1>
-    <p className="text-xl mb-1 animate-fadeInDown animate-delay-200">г. Алматы</p>
-    <p className="text-xl animate-fadeInDown animate-delay-400">Тел: +7 700 123 4567</p>
-  </div>
-
-
   // Продукты с категорией
   const products = [
 
@@ -78,28 +64,32 @@ export default function Home() {
 
   ];
 
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.find(
-        (item) => item.id === product.id
-      );
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  
 
-      if (existingProduct) {
-        return prevCart.map((item) =>
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+
+      if (existing) {
+        return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-      } else {
-        return [...prevCart, { ...product, quantity: 1 }];
       }
+
+      return [...prev, { ...product, quantity: 1 }];
     });
   };
 
-
   const removeFromCart = (id) => {
-    setCart((prevCart) =>
-      prevCart
+    setCart((prev) =>
+      prev
         .map((item) =>
           item.id === id
             ? { ...item, quantity: item.quantity - 1 }
@@ -109,222 +99,204 @@ export default function Home() {
     );
   };
 
-
-  const clearCart = () => setCart([]);
-
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-
-  const handleBuyWhatsApp = () => {
-    if (cart.length === 0) {
-      alert("Добавьте хотя бы один товар в корзину");
-      return;
-    }
-    if (!customerName || !customerPhone) {
-      alert("Пожалуйста, заполните имя и телефон");
-      return;
-    }
-
-    const phone = "77077787009"; // ваш номер WhatsApp
-    const itemsList = cart.map(item => `${item.name} — ${item.price} ₸`).join("\n");
-    const message = encodeURIComponent(
-      `Здравствуйте! Я хочу заказать:\n${itemsList}\nИтого: ${totalPrice} ₸\nИмя: ${customerName}\nТелефон: ${customerPhone}`
-    );
-
-    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
-  };
-
-  // Список категорий
-  const categories = [...new Set(products.map(p => p.category))];
-
   return (
-      <div className="min-h-screen 
-        bg-gradient-to-b 
-        from-[#1a0f0f] 
-        via-[#2a1a1a] 
-        to-[#f5e6ea]">
+    <div className="bg-[#FFF6F8] min-h-screen">
 
-        {/* HERO С ФОТО */}
-    <section 
-    className="h-[80vh] relative overflow-hidden flex items-center justify-center"
-    >
-
-      {/* Фоновая картинка */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/welcome.png')" }}
-      ></div>
-
-      {/* Fade только фона */}
-      <div className="absolute inset-0 bg-gradient-to-b 
-                      from-transparent 
-                      via-transparent 
-                      to-[#2a1a1a]">
-      </div>
-
-      {/* ТЕКСТ — выше всех слоёв */}
-      <div className="relative z-10 text-white text-center px-6">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          Bon Macarons!
+      {/* HEADER */}
+      <div className="text-center py-16">
+        <h1 className="text-5xl font-light tracking-wide text-[#4C3A42]">
+          Bon Macarons
         </h1>
-
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-           Выбор тех, кто знает толк в сладостях - от Алматы до Астаны🎀
-        </h1>
-
-        <p className="text-lg md:text-xl">
-          г.Алматы, Кунаева 19 в «FF»
-        </p>
-        <p className="text-lg md:text-xl">
-          • +7 707 778 7009
+        <p className="mt-4 text-[#A46B7A] text-lg">
+          Нежные подарочные наборы ручной работы
         </p>
       </div>
 
-    </section>
-
-      <h1 className="text-4xl font-bold text-center text-pink-700 mb-8"></h1>
-
+      {/* CART BUTTON */}
       <button
         onClick={() => setIsCartOpen(true)}
-        className="fixed top-6 right-6 bg-[#c48a9a] hover:bg-[#b57888] text-white px-5 py-3 rounded-full shadow-lg z-40"
+        className="fixed top-6 right-6 bg-[#D499A6] hover:bg-[#C07F8E] text-white px-6 py-3 rounded-full shadow-lg transition"
       >
-        🛒 Ваша Корзина ({cart.length})
+        🛍 {cart.length}
       </button>
 
-      {/* Выбор категории */}
-      <div className="flex justify-center mb-6 space-x-4">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-full font-semibold ${
-              activeCategory === cat
-                ? "bg-pink-600 text-white"
-                : "bg-white text-pink-700 border border-pink-400"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      {/* CATEGORY OR PRODUCTS VIEW */}
+
+{!selectedCategory ? (
+
+  // ===== ГЛАВНАЯ СТРАНИЦА (КАТЕГОРИИ) =====
+  <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 px-6 pb-20">
+
+    {[
+      { title: "Макаронс", image: "/images/macarons_15.png" },
+      { title: "Клубника в шоколаде", image: "/images/berry_korzina.jpg" },
+      { title: "Бонбоньерки", image: "/strawberry2.jpg" },
+    ].map((cat) => (
+      <div
+        key={cat.title}
+        onClick={() => setSelectedCategory(cat.title)}
+        className="cursor-pointer group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500"
+      >
+        <img
+          src={cat.image}
+          alt={cat.title}
+          className="w-full h-[420px] object-cover group-hover:scale-105 transition duration-700"
+        />
+
+        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+          <h2 className="text-white text-3xl font-light tracking-wide">
+            {cat.title}
+          </h2>
+        </div>
       </div>
+    ))}
 
-      {/* Товары выбранной категории */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products
-          .filter((p) => p.category === activeCategory)
-          .map((product) => (
-            <div key={product.id} className="w-45 p-4 bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
-            <img 
-              src={product.img} 
-              alt={product.name} 
-              className="w-full h-80 object-contain bg-white" 
-            />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-                <p className="mt-1 text-gray-600 text-sm">{product.description}</p>
-                <p className="mt-1 text-lg text-gray-600">{product.price} ₸</p>
-              </div>
-              <button
-                onClick={() => addToCart(product)}
-                className="mt-5 w-full bg-[#c48a9a] hover:bg-[#b57888] text-white text-lg py-5 rounded-lg transition"
-              >
-                Добавить в корзину
-              </button>
+  </div>
 
-            </div>
-          ))}
-      </div>
+) : (
 
-      {/* Корзина */}
+      // ===== ТОВАРЫ ВЫБРАННОЙ КАТЕГОРИИ =====
+      <div className="max-w-6xl mx-auto px-6 pb-20">
 
-      {isCartOpen && (
-  <>
-    {/* Затемнение фона */}
-    <div
-      className="fixed inset-0 bg-black/30 z-40"
-      onClick={() => setIsCartOpen(false)}
-    ></div>
-
-    {/* Панель корзины */}
-    <div className="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 p-6 overflow-y-auto transition-transform duration-300">
-      
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-[#a46b7a]">Корзина</h2>
         <button
-          onClick={() => setIsCartOpen(false)}
-          className="text-2xl font-bold"
+          onClick={() => setSelectedCategory(null)}
+          className="mb-10 text-[#A46B7A] hover:underline"
         >
-          ×
+          ← Назад к категориям
         </button>
-      </div>
 
-      {cart.length === 0 ? (
-        <p className="text-gray-500">Корзина пуста</p>
-      ) : (
-        <>
-          <ul className="mb-4">
-      {cart.map((item) => (
-        <div key={item.id} className="flex justify-between items-center mb-3">
-          
-          <div>
-            <p className="font-medium">
-              {item.name} × {item.quantity}
-            </p>
-            <p className="text-sm text-gray-500">
-              {item.price * item.quantity} ₸
-            </p>
-          </div>
+        <div className="grid md:grid-cols-2 gap-12">
 
-          <button
-            onClick={() => removeFromCart(item.id)}
-            className="text-red-500 text-lg"
-          >
-            ×
-          </button>
+          {products
+            .filter((product) => product.category === selectedCategory)
+            .map((product) => {
+
+              const cartItem = cart.find((item) => item.id === product.id);
+
+              return (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-3xl shadow-sm hover:shadow-2xl overflow-hidden transition duration-500 group"
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={product.img}
+                      alt={product.name}
+                      className="w-full h-[450px] object-cover group-hover:scale-105 transition duration-700"
+                    />
+
+                    {cartItem && (
+                      <div className="absolute top-4 right-4 bg-[#D499A6] text-white px-4 py-1 rounded-full text-sm shadow">
+                        ×{cartItem.quantity}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-8">
+                    <h2 className="text-2xl font-medium text-[#4C3A42]">
+                      {product.name}
+                    </h2>
+
+                    <p className="mt-3 text-xl text-[#A46B7A] font-semibold">
+                      {product.price} ₸
+                    </p>
+
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="mt-6 w-full bg-[#D499A6] hover:bg-[#C07F8E] text-white py-4 rounded-full font-medium tracking-wide transition duration-300"
+                    >
+                      Добавить в корзину
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
 
         </div>
-      ))}
+      </div>
 
-          </ul>
+    )}
 
-          <input
-            type="text"
-            placeholder="Ваше имя"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            className="w-full p-3 border rounded mb-3"
+      {/* CART SIDEBAR */}
+      {isCartOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/30"
+            onClick={() => setIsCartOpen(false)}
           />
 
-          <input
-            type="tel"
-            placeholder="Ваш телефон"
-            value={customerPhone}
-            onChange={(e) => setCustomerPhone(e.target.value)}
-            className="w-full p-3 border rounded mb-4"
-          />
+          <div className="fixed top-0 right-0 h-full w-[420px] bg-white shadow-2xl p-8 overflow-y-auto">
+            <h2 className="text-3xl font-light text-[#4C3A42] mb-8">
+              Корзина
+            </h2>
 
+            {cart.length === 0 && (
+              <p className="text-gray-400">Корзина пуста</p>
+            )}
 
-          <p className="font-semibold mb-4">
-            Итого: {totalPrice} ₸
-          </p>
+            {cart.map((item) => (
+              <div
+                key={item.id}
+                className="flex justify-between items-center border-b pb-4 mb-4"
+              >
+                <div>
+                  <p className="text-[#4C3A42] font-medium">
+                    {item.name}
+                  </p>
+                  <span className="text-gray-400 text-sm">
+                    ×{item.quantity}
+                  </span>
+                </div>
 
-          <button
-            onClick={handleBuyWhatsApp}
-            className="w-full bg-[#c48a9a] hover:bg-[#b57888] text-white py-3 rounded-lg"
-          >
-            Заказать
-          </button>
+                <div className="text-right">
+                  <p className="text-[#A46B7A] font-semibold">
+                    {item.price * item.quantity} ₸
+                  </p>
+                  <button
+                    onClick={() => removeFromCart(item.id)}
+                    className="text-sm text-gray-400 hover:text-red-400"
+                  >
+                    убрать
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {cart.length > 0 && (
+              <>
+                <p className="text-xl font-semibold text-[#4C3A42] mb-6">
+                  Итого: {totalPrice} ₸
+                </p>
+
+                <input
+                  type="text"
+                  placeholder="Ваше имя"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  className="w-full p-4 border border-gray-200 rounded-xl mb-4 focus:ring-2 focus:ring-[#D499A6] outline-none"
+                />
+
+                <input
+                  type="tel"
+                  placeholder="Ваш телефон"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  className="w-full p-4 border border-gray-200 rounded-xl mb-6 focus:ring-2 focus:ring-[#D499A6] outline-none"
+                />
+
+                <button className="w-full bg-[#D499A6] hover:bg-[#C07F8E] text-white py-4 rounded-full text-lg transition">
+                  Оформить заказ
+                </button>
+              </>
+            )}
+          </div>
         </>
       )}
-    </div>
-  </>
-)}
-
-
-
     </div>
   );
 }
