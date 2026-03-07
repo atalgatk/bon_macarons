@@ -71,6 +71,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
+  const [isAddressOpen, setIsAddressOpen] = useState(false);
 
   useEffect(() => {
   const savedCity = localStorage.getItem("city");
@@ -273,6 +274,45 @@ export default function Home() {
         </div>
       </div>
     )}
+
+    {/* ADDRESS MODAL */}
+
+{isAddressOpen && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-6">
+
+    <div className="bg-white max-w-md w-full rounded-3xl p-8 relative shadow-xl">
+
+      <button
+        onClick={() => setIsAddressOpen(false)}
+        className="absolute right-4 top-4 text-xl text-gray-400"
+      >
+        ✕
+      </button>
+
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        Наши адреса
+      </h2>
+
+      <div className="space-y-4 text-center">
+
+        <p className="text-lg">
+          📍 Астана  
+          <br />
+          ул. Назарбаева 12
+        </p>
+
+        <p className="text-lg">
+          📍 Алматы  
+          <br />
+          пр. Абая 45
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+)}
 
       {/* CART SIDEBAR */}
       {isCartOpen && (
